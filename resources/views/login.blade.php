@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"  content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Instagram</title>
     <link rel="stylesheet" href="./css/loginstyle.css">
 </head>
@@ -26,11 +26,11 @@
         <form class="login-form" action="{{url('DoLogin')}}" method="post">
             @csrf
             <div class="field">
-                <input name="email" type="email" placeholder="Phone number, username, or email" />
+                <input name="email" type="email" placeholder="Phone number, username, or email"/>
                 <label for="username">Phone number, username, or email</label>
             </div>
             <div class="field">
-                <input name="password" type="password" placeholder="password" />
+                <input name="password" type="password" placeholder="password"/>
                 <label for="password">Password</label>
             </div>
             <button class="login-button" type="submit">Log In</button>

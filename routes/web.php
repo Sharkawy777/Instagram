@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,24 +14,23 @@ use App\Http\Controllers\userController;
 |
 */
 
-Route::get('/',[userController::class,'index']);
+Route::get('/', [userController::class, 'index']);
 
-Route::get('home',[userController::class,'index']);
+Route::get('home', [userController::class, 'index']);
 
-Route::get('signup',[userController::class,'create']);
-Route::post('register',[userController::class,'store']);
+Route::get('signup', [userController::class, 'create']);
+Route::post('register', [userController::class, 'store']);
 
-Route::get('login',[userController::class,'login']);
-Route::post('DoLogin',[userController::class,'doLogin']);
+Route::get('login', [userController::class, 'login']);
+Route::post('DoLogin', [userController::class, 'doLogin']);
 
-Route::get('/edit/{id}',[userController::class,'edit']);
-Route::post('update',[userController::class,'update']);
+Route::get('/edit/{id}', [userController::class, 'edit']);
+Route::post('update', [userController::class, 'update']);
 
-Route::get('logout',[userController::class,'logout']);
+Route::get('logout', [userController::class, 'logout']);
 
 
-
-Route::get('Destroy/{id}',[userController::class,'destroy']);
+Route::get('Destroy/{id}', [userController::class, 'destroy']);
 
 
 
