@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\postController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
 
@@ -29,10 +30,20 @@ Route::post('update', [userController::class, 'update']);
 
 Route::get('logout', [userController::class, 'logout']);
 
-
 Route::get('Destroy/{id}', [userController::class, 'destroy']);
 
+Route::get('follow/{id}', [userController::class, 'follow']);
 
+Route::post('comment/{id}', [userController::class, 'comment']);
 
+Route::resource('Post',postController::class);
+
+// /Post         (GET)            ==  Route::get('Post',[PostController::class,'index']);
+// /Post/create  (GET)            ==  Route::get('Post/create',[PostController::class,'create']);
+// /Post         (post)           ==  Route::post('Post',[PostController::class,'store']);
+// /Post/{id}    (GET)            ==  Route::get('Post/{id}',[PostController::class,'show']);
+// /Post/{id}/edit    (GET)       ==  Route::get('Post/{id}/edit',[PostController::class,'edit']);
+// /Post/{id}    (put)            ==  Route::put('Post/{id}',[PostController::class,'update']);
+// /Post/{id}    (delete)         ==  Route::delete('Post/{id}',[PostController::class,'destory']);
 
 

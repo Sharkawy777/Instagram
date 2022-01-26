@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
+use App\Models\Post;
 use App\Models\Users;
 use Illuminate\Http\Request;
 
@@ -11,8 +13,13 @@ class userController extends Controller
     public function index()
     {
         if (auth()->check()) {
-            $data = Users::get();
-            return view('index', ['data' => $data]);
+            $users = Users::get();
+            $data = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('created_at', 'DESC')->select('posts.*', 'users.name as UserName')->get();
+//            $comments = Comment::join('posts', 'posts.id', '=', 'comments.post_id')->orderBy('created_at', 'DESC')->select('comments.*')->get();
+            $comments = Comment::join('posts', 'posts.id', '=', 'comments.post_id')->orderBy('created_at', 'DESC')->select('comments.*')->get();
+
+//            dd($comments);
+            return view('index', ['data' => $data, 'users' => $users, 'comments' => $comments]);
         } else {
             return redirect(url('/login'));
         }
@@ -25,23 +32,35 @@ class userController extends Controller
 
     public function store(Request $request)
     {
+//        dd($request);
         $data = $this->validate($request, [
             "name" => "required",
             "username" => "required",
             "password" => "required|min:6|max:50",
             "email" => "required|email",
             "phone" => "required|numeric|digits:11",
+            "image" => "required|image|mimes:png,jpg"
         ]);
 //        dd($data);
 
         $data['password'] = bcrypt($data['password']);
 
-        $op = Users::create($data);
+        $FinalName = time() . rand() . '.' . $request->image->extension();
 
-        if ($op) {
-            $Message = "Raw Inserted";
+        if ($request->image->move(public_path('images'), $FinalName)) {
+
+            $data['image'] = $FinalName;
+
+//            dd($data);
+            $op = Users::create($data);
+
+            if ($op) {
+                $Message = "User Inserted";
+            } else {
+                $Message = "Error Try Again";
+            }
         } else {
-            $Message = "Error Try Again";
+            $Message = "Error In Uploading Try Again ";
         }
 
         session()->flash('Message', $Message);
@@ -70,7 +89,6 @@ class userController extends Controller
             return redirect(url('/login'));
         }
     }
-
 
     public function edit($id)
     {
@@ -110,21 +128,66 @@ class userController extends Controller
         return redirect(url('/login'));
     }
 
-
     public function destroy($id)
     {
+        $data = Users::find($id);
 
-        $op = Users::where('id', $id)->delete();
+        $op = Users::find($id)->delete();    // where('id',$id)
 
         if ($op) {
+            unlink(public_path('images/' . $data->image));
             $Message = "Raw Removed";
         } else {
             $Message = "Error Try Again";
         }
 
         session()->flash('Message', $Message);
-
         return redirect(url('/User'));
+    }
+
+
+    public function comment(Request $request)
+    {
+        $data = $this->validate($request, [
+            "comment" => "required|max:200",
+            "post_id" => "required"
+        ]);
+
+        $data['user_id'] = auth()->user()->id;
+//        dd($data);
+        $op = Comment::create($data);
+
+        if ($op) {
+            $Message = "Raw Inserted";
+        } else {
+            $Message = "Error Try Again";
+        }
+        session()->flash('Message', $Message);
+
+        return redirect(url('/home'));
+    }
+
+    public function follow(Request $request)
+    {
+        dd($request);
+        $data = $this->validate($request, [
+            "comment" => "required|max:200",
+        ]);
+
+//        $data['post_id'] = ;
+
+        $op = Comment::create($data);
+
+        //  blog::create(['title' => $request->title , 'content' => $request->content , 'addedBy' => $request->addedBy] );
+
+        if ($op) {
+            $Message = "Raw Inserted";
+        } else {
+            $Message = "Error Try Again";
+        }
+        session()->flash('Message', $Message);
+
+        return redirect(url('/home'));
     }
 
 }

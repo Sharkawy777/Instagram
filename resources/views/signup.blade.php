@@ -21,20 +21,20 @@
             </div>
         @endif
 
-        <form class="login-form" method="post" action="{{url('register')}}">
+        <form class="login-form" method="post" action="{{url('register')}}" enctype="multipart/form-data">
             @csrf
             <div class="field">
-                <input name="name" type="text" placeholder="Name"/>
+                <input name="name" type="text" placeholder="Name" value="{{old('name')}}"/>
                 <label for="name">Name</label>
             </div>
 
             <div class="field">
-                <input name="username" type="text" placeholder="Username"/>
+                <input name="username" type="text" placeholder="Username" value="{{old('username')}}"/>
                 <label for="username">Username</label>
             </div>
 
             <div class="field">
-                <input name="email" type="email" placeholder="email"/>
+                <input name="email" type="email" placeholder="email" value="{{old('email')}}"/>
                 <label for="email">Email</label>
             </div>
 
@@ -45,8 +45,13 @@
 
 
             <div class="field">
-                <input name="phone" type="text" placeholder="Phone Number"/>
+                <input name="phone" type="text" placeholder="Phone Number" value="{{old('phone')}}"/>
                 <label for="phone">Phone Number</label>
+            </div>
+
+            <div class="field">
+                <input name="image" type="file"/>
+                <label for="image">Profile picture</label>
             </div>
 
             <button class="login-button" type="submit">Signup</button>
