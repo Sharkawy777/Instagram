@@ -16,17 +16,14 @@ use App\Http\Controllers\commentController;
 |
 */
 
+Route::get('/', [userController::class, 'index']);
+Route::get('home', [userController::class, 'index']);
 
 Route::get('signup', [userController::class, 'create']);
 Route::post('register', [userController::class, 'store']);
 
 Route::get('login', [userController::class, 'login']);
 Route::post('DoLogin', [userController::class, 'doLogin']);
-
-
-Route::get('/', [userController::class, 'index']);
-
-Route::get('home', [userController::class, 'index']);
 
 Route::get('/edit/{id}', [userController::class, 'edit']);
 Route::post('update', [userController::class, 'update']);
@@ -43,13 +40,3 @@ Route::post('comment/{id}', [commentController::class, 'store']);
 Route::post('comment/{id}/remove', [commentController::class, 'destroy']);
 
 Route::resource('Post',postController::class);
-
-// /Post         (GET)            ==  Route::get('Post',[PostController::class,'index']);
-// /Post/create  (GET)            ==  Route::get('Post/create',[PostController::class,'create']);
-// /Post         (post)           ==  Route::post('Post',[PostController::class,'store']);
-// /Post/{id}    (GET)            ==  Route::get('Post/{id}',[PostController::class,'show']);
-// /Post/{id}/edit    (GET)       ==  Route::get('Post/{id}/edit',[PostController::class,'edit']);
-// /Post/{id}    (put)            ==  Route::put('Post/{id}',[PostController::class,'update']);
-// /Post/{id}    (delete)         ==  Route::delete('Post/{id}',[PostController::class,'destory']);
-
-

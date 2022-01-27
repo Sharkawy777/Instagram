@@ -91,7 +91,6 @@
                                             <p class="description"><span>{{$comment->name}} </span>{{$comment->comment}}
                                                 <br>{{$comment->updated_at}}</p>
                                             @if($comment->user_id == auth()->user()->id)
-                                                {{--                                            <a href="{{url('comment/'.$comment->id.'/remove')}}">delete</a>--}}
                                                 <a href='' data-toggle="modal" data-target="#modal_single_del{{$key}}"
                                                    class=''>Remove</a>
                                                 <div class="modal" id="modal_single_del{{$key}}" tabindex="-1"
