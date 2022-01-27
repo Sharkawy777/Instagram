@@ -69,7 +69,7 @@
                             <div class="post">
                                 <div class="info">
                                     <div class="user">
-                                        <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
+                                        <div class="profile-pic"><img src="{{url('images/'.$raw->profile)}}" alt=""></div>
                                         <p class="username">{{$raw->UserName}}</p>
                                     </div>
                                     <img src="img/option.PNG" class="options" alt="">

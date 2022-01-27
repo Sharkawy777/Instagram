@@ -19,7 +19,7 @@ class userController extends Controller
     {
         if (auth()->check()) {
             $users = Users::get();
-            $data = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('created_at', 'DESC')->select('posts.*', 'users.name as UserName')->get();
+            $data = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('created_at', 'DESC')->select('posts.*', 'users.name as UserName','users.image as profile')->get();
             $comments = Comment::join('posts', 'posts.id', '=', 'comments.post_id')->join('users', 'users.id', '=', 'comments.user_id')->orderBy('created_at', 'DESC')->select('comments.*', 'users.name')->get();
             $followers = Following::join('users', 'users.id', '=', 'following.user_id')->select('following.following_id')->get();
 //            dd($followers[0]);
