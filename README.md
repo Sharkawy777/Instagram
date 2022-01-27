@@ -1,3 +1,20 @@
+# Instagram
+
+# Project was developed with php Laravel & Mysql database
+
+# The Services the System provides:
+
+It gives the user ability to:
+
+     1- Create new posts.
+     2- Follow other users to see their photos.
+     3- Comment on users posts.
+     4. login and sign up
+
+# Data-Structure
+![image](https://user-images.githubusercontent.com/54472692/151321434-716b3b06-0ad0-44ec-a1b4-d6cfb224aae1.png)
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
