@@ -30,35 +30,38 @@
     <div class="wrapper">
         <div class="left-col">
             <div class="status-wrapper">
-                <div class="status-card">
-                    <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
-                    <p class="username">user_name_1</p>
-                </div>
-                <div class="status-card">
-                    <div class="profile-pic"><img src="img/cover 2.png" alt=""></div>
-                    <p class="username">user_name_2</p>
-                </div>
-                <div class="status-card">
-                    <div class="profile-pic"><img src="img/cover 2.png" alt=""></div>
-                    <p class="username">user_name_3</p>
-                </div>
-                <div class="status-card">
-                    <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
-                    <p class="username">user_name_5</p>
-                </div>
-                <div class="status-card">
-                    <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
-                    <p class="username">user_name_6</p>
-                </div>
-                <div class="status-card">
-                    <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
-                    <p class="username">user_name_7</p>
-                </div>
-                <div class="status-card">
-                    <div class="profile-pic"><img src="img/cover 3.png" alt=""></div>
-                    <p class="username">user_name_3</p>
-                </div>
-                {{--                // +5 more status card elements.--}}
+                @foreach($users as $key => $value)
+                    <div class="status-card">
+                        <div class="profile-pic"><img src="{{url('images/'.$value->image)}}" alt=""></div>
+{{--                        <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>--}}
+                        <p class="username">{{substr($value->name,0,14)}}</p>
+                    </div>
+                @endforeach
+                {{--                <div class="status-card">
+                                    <div class="profile-pic"><img src="img/cover 2.png" alt=""></div>
+                                    <p class="username">user_name_2</p>
+                                </div>
+                                <div class="status-card">
+                                    <div class="profile-pic"><img src="img/cover 2.png" alt=""></div>
+                                    <p class="username">user_name_3</p>
+                                </div>
+                                <div class="status-card">
+                                    <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
+                                    <p class="username">user_name_5</p>
+                                </div>
+                                <div class="status-card">
+                                    <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
+                                    <p class="username">user_name_6</p>
+                                </div>
+                                <div class="status-card">
+                                    <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
+                                    <p class="username">user_name_7</p>
+                                </div>
+                                <div class="status-card">
+                                    <div class="profile-pic"><img src="img/cover 3.png" alt=""></div>
+                                    <p class="username">user_name_3</p>
+                                </div>--}}
+
             </div>
 
             <div class="wrapper">
@@ -69,7 +72,8 @@
                             <div class="post">
                                 <div class="info">
                                     <div class="user">
-                                        <div class="profile-pic"><img src="{{url('images/'.$raw->profile)}}" alt=""></div>
+                                        <div class="profile-pic"><img src="{{url('images/'.$raw->profile)}}" alt="">
+                                        </div>
                                         <p class="username">{{$raw->UserName}}</p>
                                     </div>
                                     <img src="img/option.PNG" class="options" alt="">
@@ -166,7 +170,8 @@
                 </div>
                 <a class="btn btn-action" href="{{url('Post/')}}">My Profile</a>
                 <a class="btn btn-action" href="{{url('Post/create')}}">Create New Post</a>
-                <p class="suggestion-text">Suggestions for you</p>
+                <p class="suggestion-text">Followers and Following</p>
+{{--                <p class="suggestion-text">Suggestions for you</p>--}}
 
                 @foreach($users as $key => $value)
                     @if($value->id != auth()->user()->id)

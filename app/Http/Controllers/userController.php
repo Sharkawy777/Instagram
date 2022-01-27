@@ -19,7 +19,7 @@ class userController extends Controller
     {
         if (auth()->check()) {
             $users = Users::get();
-            $data = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('created_at', 'DESC')->select('posts.*', 'users.name as UserName','users.image as profile')->get();
+            $data = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('created_at', 'DESC')->select('posts.*', 'users.name as UserName', 'users.image as profile')->get();
             $comments = Comment::join('posts', 'posts.id', '=', 'comments.post_id')->join('users', 'users.id', '=', 'comments.user_id')->orderBy('created_at', 'DESC')->select('comments.*', 'users.name')->get();
             $followers = Following::join('users', 'users.id', '=', 'following.user_id')->select('following.following_id')->get();
 //            dd($followers[0]);
@@ -83,6 +83,7 @@ class userController extends Controller
         return view('login');
     }
 
+    //with email only
     public function doLogin(Request $request)
     {
         $data = $this->validate($request, [
@@ -116,7 +117,26 @@ class userController extends Controller
             "email" => "required|email",
             "id" => "required|numeric",
             "phone" => "required|numeric|digits:11",
+            "image" => "nullable|image|mimes:png,jpg",
         ]);
+        $rawData = Users::find($data['id']);
+//        dd($rawData);
+
+        if (request()->hasFile('image')) {
+
+            $FinalName = time() . rand() . '.' . $request->image->extension();
+
+            if ($request->image->move(public_path('images'), $FinalName)) {
+                unlink(public_path('images/' . $rawData->image));
+            } else {
+                $FinalName = $rawData->image;
+            }
+        } else {
+            $FinalName = $rawData->image;
+        }
+
+
+        $data['image'] = $FinalName;
 
         $op = Users::where('id', $data['id'])->update($data);
 

@@ -22,7 +22,7 @@
             </div>
         @endif
 
-        <form class="login-form" method="post" action="{{url('update')}}">
+        <form class="login-form" method="post" action="{{url('update/')}}" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="id" value="{{$data[0]->id}}">
             <div class="field">
@@ -44,6 +44,12 @@
                 <input name="phone" type="text" placeholder="Phone Number" value="{{$data[0]->phone}}"/>
                 <label for="phone">Phone Number</label>
             </div>
+
+            <div class="field">
+                <input name="image" type="file"/>
+                <label for="image">Profile picture</label>
+            </div>
+            <img src="{{url('/images/'.$data[0]->image)}}" alt="No-image" height="50px" width="50px">
 
             <button class="login-button" type="submit">Save Changes</button>
 

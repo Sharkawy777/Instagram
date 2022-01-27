@@ -26,7 +26,7 @@ Route::get('login', [userController::class, 'login']);
 Route::post('DoLogin', [userController::class, 'doLogin']);
 
 Route::get('/edit/{id}', [userController::class, 'edit']);
-Route::post('update', [userController::class, 'update']);
+Route::post('update/', [userController::class, 'update']);
 
 Route::get('logout', [userController::class, 'logout']);
 

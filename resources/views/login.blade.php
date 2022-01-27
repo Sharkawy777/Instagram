@@ -27,7 +27,8 @@
             @csrf
             <div class="field">
                 <input name="email" type="email" placeholder="Phone number, username, or email"/>
-                <label for="username">Phone number, username, or email</label>
+{{--                <label for="username">Phone number, username, or email</label>--}}
+                <label for="username">Email Address</label>
             </div>
             <div class="field">
                 <input name="password" type="password" placeholder="password"/>
