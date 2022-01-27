@@ -63,42 +63,90 @@
 
             <div class="wrapper">
                 <div class="left-col">
+
                     @foreach ($data as $key => $raw)
-                        <div class="post">
-                            <div class="info">
-                                <div class="user">
-                                    <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
-                                    <p class="username">{{$raw->UserName}}</p>
+                        @if(in_array($raw->user_id,$followers) or $raw->user_id==auth()->user()->id)
+                            <div class="post">
+                                <div class="info">
+                                    <div class="user">
+                                        <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
+                                        <p class="username">{{$raw->UserName}}</p>
+                                    </div>
+                                    <img src="img/option.PNG" class="options" alt="">
                                 </div>
-                                <img src="img/option.PNG" class="options" alt="">
-                            </div>
-                            <img src="{{url('images/'.$raw->image)}}" class="post-image" alt="">
-                            <div class="post-content">
-                                <div class="reaction-wrapper">
-                                    <img src="img/like.PNG" class="icon" alt="">
-                                    <img src="img/comment.PNG" class="icon" alt="">
-                                    <img src="img/send.PNG" class="icon" alt="">
-                                    <img src="img/save.PNG" class="save icon" alt="">
-                                </div>
-                                <p class="likes">1,012 likes</p>
-                                <p class="description"><span>{{$raw->UserName}} </span>{{$raw->caption}}</p>
-                                <p class="post-time">{{$raw->created_at}}</p>
-                            </div>
-                            @foreach($comments as $comment)
-                                <p class="description"><span>{{$comment->UserName}} </span>{{$comment->comment}}</p>
-                            @endforeach
+                                <img src="{{url('images/'.$raw->image)}}" class="post-image" alt="">
+                                <div class="post-content">
+                                    <div class="reaction-wrapper">
+                                        <img src="img/like.PNG" class="icon" alt="">
+                                        <img src="img/comment.PNG" class="icon" alt="">
+                                        <img src="img/send.PNG" class="icon" alt="">
+                                        <img src="img/save.PNG" class="save icon" alt="">
+                                    </div>
+                                    <p class="likes">1,012 likes</p>
+                                    <p class="description"><span>{{$raw->UserName}} </span>{{$raw->caption}}</p>
+                                    <p class="post-time">{{$raw->created_at}}</p>
 
-                            <form method="post" action="{{url('comment/'.$raw->id)}}">
-                                @csrf
-                                <input type="hidden" value="{{$raw->id}}" name="post_id">
-                                <div class="comment-wrapper">
-                                    <img src="img/smile.PNG" class="icon" alt="">
-                                    <input type="text" class="comment-box" placeholder="Add a comment" name="comment">
-                                    <button class="comment-btn">post</button>
-                                </div>
-                            </form>
-                        </div>
+                                    @foreach($comments as $comment)
+                                        @if($comment->post_id == $raw->id)
+                                            <p class="description"><span>{{$comment->name}} </span>{{$comment->comment}}
+                                                <br>{{$comment->updated_at}}</p>
+                                            @if($comment->user_id == auth()->user()->id)
+                                                {{--                                            <a href="{{url('comment/'.$comment->id.'/remove')}}">delete</a>--}}
+                                                <a href='' data-toggle="modal" data-target="#modal_single_del{{$key}}"
+                                                   class=''>Remove</a>
+                                                <div class="modal" id="modal_single_del{{$key}}" tabindex="-1"
+                                                     role="dialog">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Delete Confirmation</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
 
+                                                            <div class="modal-body">
+                                                                Remove {{$comment->comment}} ?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <form
+                                                                    action="{{url('comment/'.$comment->id.'/remove')}}"
+                                                                    method="post">
+                                                                    @csrf
+                                                                    {{--                                                                @method('delete')--}}
+
+                                                                    <div class="not-empty-record">
+                                                                        <button type="submit" class="btn btn-primary">
+                                                                            Delete
+                                                                        </button>
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                                data-dismiss="modal">close
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                </div>
+
+
+                                <form method="post" action="{{url('comment/'.$raw->id)}}">
+                                    @csrf
+                                    <input type="hidden" value="{{$raw->id}}" name="post_id">
+                                    <div class="comment-wrapper">
+                                        <img src="img/smile.PNG" class="icon" alt="">
+                                        <input type="text" class="comment-box" placeholder="Add a comment"
+                                               name="comment">
+                                        <button class="comment-btn">post</button>
+                                    </div>
+                                </form>
+                            </div>
+                        @endif
                     @endforeach
 
                 </div>
@@ -115,22 +163,30 @@
                     <div>
                         <p class="username">{{auth()->user()->name}}</p>
                     </div>
-                    <button class="action-btn">switch</button>
+                    <a class="btn btn-action" href="{{url('edit/'.auth()->user()->id)}}">Update profile</a>
                 </div>
-
+                <a class="btn btn-action" href="{{url('Post/')}}">My Profile</a>
+                <a class="btn btn-action" href="{{url('Post/create')}}">Create New Post</a>
                 <p class="suggestion-text">Suggestions for you</p>
 
                 @foreach($users as $key => $value)
-                    <div class="profile-card">
-                        <div class="profile-pic">
-                            <img src="{{url('images/'.$value->image)}}" alt="">
+                    @if($value->id != auth()->user()->id)
+                        <div class="profile-card">
+                            <div class="profile-pic">
+                                <img src="{{url('images/'.$value->image)}}" alt="">
+                            </div>
+                            <div>
+                                <p class="username">{{$value->name}}</p>
+                                <p class="sub-text">{{$value->username}}</p>
+                            </div>
+                            @if(in_array($value->id,$followers))
+                                <a href="{{url('unfollow/'.$value->id)}}" class="btn action-btn">unfollow</a>
+                            @else
+                                <a href="{{url('follow/'.$value->id)}}" class="btn action-btn">follow</a>
+
+                            @endif
                         </div>
-                        <div>
-                            <p class="username">{{$value->name}}</p>
-                            <p class="sub-text">{{$value->username}}</p>
-                        </div>
-                        <a href="{{url('follow/'.$value->id)}}" class="btn action-btn">follow</a>
-                    </div>
+                    @endif
                 @endforeach
             </div>
         </div>

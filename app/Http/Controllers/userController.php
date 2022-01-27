@@ -3,23 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Following;
 use App\Models\Post;
 use App\Models\Users;
 use Illuminate\Http\Request;
 
 class userController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('isLogin', ['except' => ['create', 'store', 'login', 'doLogin']]);
+    }
 
     public function index()
     {
         if (auth()->check()) {
             $users = Users::get();
             $data = Post::join('users', 'users.id', '=', 'posts.user_id')->orderBy('created_at', 'DESC')->select('posts.*', 'users.name as UserName')->get();
-//            $comments = Comment::join('posts', 'posts.id', '=', 'comments.post_id')->orderBy('created_at', 'DESC')->select('comments.*')->get();
-            $comments = Comment::join('posts', 'posts.id', '=', 'comments.post_id')->orderBy('created_at', 'DESC')->select('comments.*')->get();
-
+            $comments = Comment::join('posts', 'posts.id', '=', 'comments.post_id')->join('users', 'users.id', '=', 'comments.user_id')->orderBy('created_at', 'DESC')->select('comments.*', 'users.name')->get();
+            $followers = Following::join('users', 'users.id', '=', 'following.user_id')->select('following.following_id')->get();
+//            dd($followers[0]);
+            foreach ($followers as $key => $value) {
+                $m[] = $value->following_id;
+            }
+//            dd($m);
 //            dd($comments);
-            return view('index', ['data' => $data, 'users' => $users, 'comments' => $comments]);
+            return view('index', ['data' => $data, 'users' => $users, 'comments' => $comments, 'followers' => $m]);
         } else {
             return redirect(url('/login'));
         }
@@ -145,17 +154,13 @@ class userController extends Controller
         return redirect(url('/User'));
     }
 
-
-    public function comment(Request $request)
+    public function follow($id)
     {
-        $data = $this->validate($request, [
-            "comment" => "required|max:200",
-            "post_id" => "required"
-        ]);
 
+        $data['following_id'] = $id;
         $data['user_id'] = auth()->user()->id;
 //        dd($data);
-        $op = Comment::create($data);
+        $op = Following::create($data);
 
         if ($op) {
             $Message = "Raw Inserted";
@@ -167,21 +172,13 @@ class userController extends Controller
         return redirect(url('/home'));
     }
 
-    public function follow(Request $request)
+    public function unfollow($id)
     {
-        dd($request);
-        $data = $this->validate($request, [
-            "comment" => "required|max:200",
-        ]);
-
-//        $data['post_id'] = ;
-
-        $op = Comment::create($data);
-
-        //  blog::create(['title' => $request->title , 'content' => $request->content , 'addedBy' => $request->addedBy] );
+        $op = Following::where('following_id', $id)->delete();
+//        $op = Following::find($id)->delete();
 
         if ($op) {
-            $Message = "Raw Inserted";
+            $Message = "Raw Deleted";
         } else {
             $Message = "Error Try Again";
         }
@@ -189,5 +186,4 @@ class userController extends Controller
 
         return redirect(url('/home'));
     }
-
 }

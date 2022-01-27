@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class postController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('isLogin');
+    }
+
     public function create()
     {
         return view('post.create');
